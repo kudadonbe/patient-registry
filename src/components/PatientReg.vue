@@ -6,8 +6,7 @@ import { collection, getDocs, onSnapshot } from "firebase/firestore";
 
 
 
-const patients = ref(
-    []);
+const patients = ref([]);
 
 onMounted(async () => {
     onSnapshot(collection(db, 'nics'), (querySnapshot) => {
