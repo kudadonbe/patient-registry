@@ -17,7 +17,6 @@ const props = defineProps(['patient']);
 
 <template>
     <div class="flex items-center min-w-0 gap-x-4">
-            <img class="w-16 flex-none rounded-full bg-gray-50" :src='patient.imageUrl' alt="" />
             <div class="min-w-0 flex-auto">
                 <p class="text-sm/6 font-semibold text-green-900">{{ patient.national_id }}</p>
                 <p class="text-sm/6 font-semibold text-green-900">{{ patient.name }}</p>

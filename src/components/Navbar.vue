@@ -29,7 +29,15 @@ const isActiveLink = (routePath) => {
                                 'py-2',
                                 'rounded-md',
                             ]">Home</RouterLink>
-                            
+                            <RouterLink to="/patient" :class="[
+                                isActiveLink('/patient')
+                                    ? 'bg-green-900'
+                                    : 'hover:bg-gray-900 hover:text-white',
+                                'text-white',
+                                'px-3',
+                                'py-2',
+                                'rounded-md',
+                            ]">Patient</RouterLink>
                             <RouterLink to="/about" :class="[
                                 isActiveLink('/about')
                                     ? 'bg-green-900'
