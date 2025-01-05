@@ -1,10 +1,8 @@
 <script setup>
-import { ref, onMounted, defineProps, defineEmits } from 'vue';
-
-const emit = defineEmits(['select']);
-
+import { ref, onMounted } from 'vue';
 
 const props = defineProps(['patients']);
+const emit = defineEmits(['select']);
 
 
 const onPatientSelected = (patient) => {
@@ -24,7 +22,7 @@ const onPatientSelected = (patient) => {
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="patient in patients" :key="patient.national_id" @click="onPatientSelected(patient)" class="bg-white border-b dark:bg-green-800 dark:border-green-700 hover:bg-green-50 dark:hover:bg-green-600">
+                <tr v-for="patient in patients" :key="patient.id" @click="onPatientSelected(patient)" class="bg-white border-b dark:bg-green-800 dark:border-green-700 hover:bg-green-50 dark:hover:bg-green-600">
                     <th scope="row" class="px-3 py-3 font-medium text-green-900 whitespace-nowrap dark:text-white">{{ patient.name }}</th>
                     <td class="px-3 py-3">{{ patient.dob }}</td>
                     <td class="px-3 py-3">{{ patient.national_id }}</td>

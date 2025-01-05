@@ -1,25 +1,35 @@
 <script setup>
-import { ref, defineProps, reactive } from 'vue';
-import { PhotoIcon, UserCircleIcon } from '@heroicons/vue/24/solid'
+import { reactive, ref } from 'vue';
 import { ChevronDownIcon } from '@heroicons/vue/16/solid'
 
-// const selectedPatient = ref(null);
 
+const newRecord = false;
+const emits = defineEmits(['addPatient', 'deletePatient', 'updatePatient']);
 const { editPatient } = defineProps(['editPatient']);
-const newPatient = reactive({
-    national_id: '',
-    name: '',
-    dob: '',
-    address: {
-        house: '',
-        island: ''
-    }
-});
+const stillData = ref(editPatient.national_id);
+// const nid = ref(editPatient.national_id);
 
 
-const savePatient = () => {
-    console.log(editPatient);
+
+// const emidData = {
+//     patient: editPatient,
+//     flag: newRecord
+// }
+
+
+const savePatient = () => { // dont need to emit data because we are using v-model
+    emits('addPatient', editPatient);
 };
+
+const deletePatient = () => {
+    emits('deletePatient', editPatient.id);
+};
+
+
+const updatePatient = () => {
+    emits('updatePatient', editPatient);
+};
+
 
 
 const formClear = () => {
@@ -105,7 +115,13 @@ const formClear = () => {
                 <button type="button" class="text-sm/6 font-semibold text-gray-900" @click="formClear">Clear</button>
                 <button type="submit"
                     class="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green
-                    -500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">Save</button>
+                    -500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">Add</button>
+                    <button type="button"
+                    class="rounded-md bg-yellow-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-yellow
+                    -500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600" @click="updatePatient">Update</button>
+                    <button type="button"
+                    class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red
+                    -500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600" @click="deletePatient">Delete</button>
             </div>
         </form>
 </template>
