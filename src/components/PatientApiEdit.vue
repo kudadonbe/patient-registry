@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, reactive } from 'vue';
-import { apiURL } from '@/api/env';
+import { apiURL } from '@/laravel-api/env';
 import PatientTable from "@/components/PatientTable.vue";
 import Patientform from '@/components/Patientform.vue';
 
