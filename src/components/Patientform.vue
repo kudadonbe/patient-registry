@@ -5,7 +5,7 @@ import { ChevronDownIcon } from '@heroicons/vue/16/solid'
 
 const { selectedPatient, houses, islands } = defineProps(['selectedPatient', 'houses', 'islands']);
 
-const emit = defineEmits(['islandChanged']);
+const emit = defineEmits(['islandChanged', 'addPatient', 'deletePatient']);
 
 
 
@@ -18,14 +18,27 @@ const onIslandSelect = () => {
     emit('islandChanged')
 };
 
+const onHouseSelect = ()=>{
+    console.log(`${selectedPatient.address.id} - ${selectedPatient.address.house}`);
+    
+};
+
+const onAddNewPatient = () => {
+    emit('addPatient', selectedPatient);
+};
+
+const onDeletePatient = () =>{
+    emit('deletePatient', selectedPatient.id);
+};
+
 
 
 </script>
 <template>
 
-    <form @submit.prevent="updateAddress">
+    <form class="border rounded pb-3">
         <div class="space-y-12 ">
-            <div class="border-b border-green-900/10 pb-12">
+            <div class="border-green-900/10 pb-12">
                 <div class="text-green-700 bg-green-50 dark:bg-green-700 dark:text-green-400 sm:rounded-lg">
                     <h2 class="text-base/7 font-semibold text-green-900 pl-3 pr-3">Patient Information</h2>
                     <p class="mt-1 text-sm/6 text-green-600 pl-3 pr-3">This information will be confidential.</p>
@@ -64,11 +77,11 @@ const onIslandSelect = () => {
                     <div class="sm:col-span-3">
                         <label for="house-name" class="block text-sm/6 font-medium text-gray-900">House</label>
                         <div class="mt-2 grid grid-cols-1">
-                            <select id="house" name="house" autocomplete="house-name"
-                                v-model="selectedPatient.address.house"
+                            <select id="house" name="house" autocomplete="house-name" @change="onHouseSelect"
+                                v-model="selectedPatient.address.id"
                                 class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6">
                                 <option value="" disabled>Select an house</option>
-                                <option v-for="house in houses" :key="house.id" :value="house.house">{{ house.house }}
+                                <option v-for="house in houses" :key="house.id" :value="house.id">{{ house.house }}
                                 </option>
                             </select>
                             <ChevronDownIcon
@@ -97,19 +110,20 @@ const onIslandSelect = () => {
             </div>
         </div>
 
-        <div class="mt-6 flex items-center justify-end gap-x-6">
-            <button type="submit"
+        <div class="mt-6 flex items-center justify-center gap-x-6">
+            <button type="button" @click="onAddNewPatient"
                 class="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green
                 -500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">Add</button>
             <button type="button"
                 class="rounded-md bg-yellow-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-yellow
                 -500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600"
                 >Update</button>
-            <button type="button"
+            <button type="button" @click="onDeletePatient"
                 class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red
                 -500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
                 >Delete</button>
-            <button type="button" class="text-sm/6 font-semibold text-gray-900">Clear</button>
+            <button type="button" class="rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red
+            -500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">Clear</button>
         </div>
     </form>
 
