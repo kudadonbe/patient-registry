@@ -1,0 +1,68 @@
+GET http://localhost:8000/api/patients/7 HTTP/1.1
+Accept: application/json
+
+######
+GET http://localhost:8000/api/addresses HTTP/1.1
+Accept: application/json
+
+##########
+
+POST http://localhost:8000/api/addresses HTTP/1.1
+Accept: application/json
+content-type: application/json
+
+{
+    "name": "Madikilanbu",
+    "island_id": 10
+}
+
+######
+GET http://localhost:8000/api/islands HTTP/1.1
+Accept: application/json
+
+
+#######
+POST http://localhost:8000/api/islands HTTP/1.1
+Accept: application/json
+content-type: application/json
+
+{
+    "atoll": "HDh.",
+    "name": "Kanamana"
+}
+
+######
+PATCH http://localhost:8000/api/islands/9 HTTP/1.1
+Accept: application/json
+content-type: application/json
+
+{
+    "name": "Kurinbee"
+}
+
+
+#######
+POST http://localhost:8000/api/patients HTTP/1.1
+Accept: application/json
+content-type: application/json
+
+{
+    "name": "Niumathath Adam",
+    "dob": "2008-05-22",
+    "national_id": "J11XY19",
+    "address_id": 8
+}
+
+
+#########
+PUT http://localhost:8000/api/patients/7
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": "Niumathath Adm",
+    "dob": "2008-05-22",
+    "national_id": "A10XX54",
+    "address_id": 8
+
+}

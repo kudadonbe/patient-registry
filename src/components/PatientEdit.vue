@@ -30,6 +30,8 @@ onMounted(async () => {
 
         });
         patientFromDB.value = patientsColl;
+        // console.log(patientFromDB);
+        
 
     });
 });

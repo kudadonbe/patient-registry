@@ -1,7 +1,10 @@
+<script setup>
+import PatientApiEdit from '@/components/PatientApiEdit.vue';
+</script>
 
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-  </div>
+   <main class="container mx-auto px-4 py-6">
+    <PatientApiEdit />
+  </main>
 </template>
 

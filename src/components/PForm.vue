@@ -1,20 +1,9 @@
 <script setup>
-import { reactive, ref } from 'vue';
-import { ChevronDownIcon } from '@heroicons/vue/16/solid'
 
-
-const newRecord = false;
 const emits = defineEmits(['addPatient', 'deletePatient', 'updatePatient']);
 const { editPatient } = defineProps(['editPatient']);
-const stillData = ref(editPatient.national_id);
-// const nid = ref(editPatient.national_id);
 
 
-
-// const emidData = {
-//     patient: editPatient,
-//     flag: newRecord
-// }
 
 
 const savePatient = () => { // dont need to emit data because we are using v-model
@@ -29,6 +18,11 @@ const deletePatient = () => {
 const updatePatient = () => {
     emits('updatePatient', editPatient);
 };
+
+
+
+
+
 
 
 
@@ -90,21 +84,10 @@ const formClear = () => {
 
                         <div class="sm:col-span-3">
                             <label for="island" class="block text-sm/6 font-medium text-gray-900">Island</label>
-                            <div class="mt-2 grid grid-cols-1">
-                                <select id="island" name="island" autocomplete="island-name"
-                                    v-model="editPatient.address.island"
-                                    class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6">
-                                    <option></option>
-                                    <option>HDh. Makunudhoo</option>
-                                    <option>HA. Kelaa</option>
-                                    <option>S. Gan</option>
-                                    <option>HA. Hirinaidhoo</option>
-                                    <option>Sh. Shydhoo</option>
-                                    <option>HDh. Vaikaradhoo</option>
-                                </select>
-                                <ChevronDownIcon
-                                    class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
-                                    aria-hidden="true" />
+                            <div class="mt-2">
+                                <input type="text" name="house-name" id="house-name" autocomplete="house-name"
+                                    placeholder="Aadhaige" v-model="editPatient.address.island"
+                                    class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6" />
                             </div>
                         </div>
                     </div>
@@ -112,16 +95,16 @@ const formClear = () => {
             </div>
 
             <div class="mt-6 flex items-center justify-end gap-x-6">
-                <button type="button" class="text-sm/6 font-semibold text-gray-900" @click="formClear">Clear</button>
                 <button type="submit"
-                    class="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green
-                    -500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">Add</button>
-                    <button type="button"
-                    class="rounded-md bg-yellow-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-yellow
-                    -500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600" @click="updatePatient">Update</button>
-                    <button type="button"
-                    class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red
-                    -500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600" @click="deletePatient">Delete</button>
+                class="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green
+                -500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">Add</button>
+                <button type="button"
+                class="rounded-md bg-yellow-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-yellow
+                -500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600" @click="updatePatient">Update</button>
+                <button type="button"
+                class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red
+                -500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600" @click="deletePatient">Delete</button>
+                <button type="button" class="text-sm/6 font-semibold text-gray-900" @click="formClear">Clear</button>
             </div>
         </form>
 </template>
