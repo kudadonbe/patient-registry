@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import PatientView from '../views/PatientView.vue'
+import FirebaseView from '../views/FirebaseView.vue'
+import LaravelView from '@/views/LaravelView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -11,9 +12,14 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: '/patient',
-      name: 'patient',
-      component: PatientView,
+      path: '/laravel',
+      name: 'laravel',
+      component: LaravelView,
+    },
+    {
+      path: '/firebase',
+      name: 'firebase',
+      component: FirebaseView,
     },
     {
       path: '/about',

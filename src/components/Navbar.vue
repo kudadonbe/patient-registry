@@ -29,15 +29,24 @@ const isActiveLink = (routePath) => {
                                 'py-2',
                                 'rounded-md',
                             ]">Home</RouterLink>
-                            <RouterLink to="/patient" :class="[
-                                isActiveLink('/patient')
+                            <RouterLink to="/firebase" :class="[
+                                isActiveLink('/firebase')
                                     ? 'bg-green-900'
                                     : 'hover:bg-gray-900 hover:text-white',
                                 'text-white',
                                 'px-3',
                                 'py-2',
                                 'rounded-md',
-                            ]">Patient</RouterLink>
+                            ]">Firebase</RouterLink>
+                            <RouterLink to="/laravel" :class="[
+                                isActiveLink('/laravel')
+                                    ? 'bg-green-900'
+                                    : 'hover:bg-gray-900 hover:text-white',
+                                'text-white',
+                                'px-3',
+                                'py-2',
+                                'rounded-md',
+                            ]">Laravel</RouterLink>
                             <RouterLink to="/about" :class="[
                                 isActiveLink('/about')
                                     ? 'bg-green-900'

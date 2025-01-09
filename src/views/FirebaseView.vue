@@ -1,11 +1,11 @@
 <script setup>
 
-import PatientEdit from '@/components/PatientEdit.vue';
+import Firebase from '@/components/Firebase.vue';
 
 </script>
 
 <template>
   <main class="container mx-auto px-4 py-6">
-    <PatientEdit />
+    <Firebase />
   </main>
 </template>
