@@ -5,29 +5,29 @@ import { ChevronDownIcon } from '@heroicons/vue/16/solid'
 
 const { selectedPatient, houses, islands } = defineProps(['selectedPatient', 'houses', 'islands']);
 
-const emit = defineEmits(['islandChanged', 'addPatient', 'deletePatient']);
+const emit = defineEmits(['islandChanged', 'addPatient', 'deletePatient', 'updatePatientInfo']);
 
 
 
 const updateAddress = () => {
     console.log('address updates');
-    
+
 };
+
+const onUpdatePatient = () =>{
+    emit('updatePatientInfo', selectedPatient);
+}
 
 const onIslandSelect = () => {
     emit('islandChanged')
 };
 
-const onHouseSelect = ()=>{
-    console.log(`${selectedPatient.address.id} - ${selectedPatient.address.house}`);
-    
-};
 
 const onAddNewPatient = () => {
     emit('addPatient', selectedPatient);
 };
 
-const onDeletePatient = () =>{
+const onDeletePatient = () => {
     emit('deletePatient', selectedPatient.id);
 };
 
@@ -68,16 +68,34 @@ const onDeletePatient = () =>{
                     <div class="sm:col-span-3">
                         <label for="dob" class="block text-sm/6 font-medium text-gray-900">Date of Birth</label>
                         <div class="mt-2">
-                            <input type="date" name="dob" id="dob" autocomplete="dob"
-                                v-model="selectedPatient.dob"
+                            <input type="date" name="dob" id="dob" autocomplete="dob" v-model="selectedPatient.dob"
                                 class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6" />
                         </div>
                     </div>
 
+
+
+                    <div class="sm:col-span-3">
+                        <label for="island" class="block text-sm/6 font-medium text-gray-900">Island</label>
+                        <div class="mt-2 grid grid-cols-1">
+                            <select id="island" name="island" autocomplete="island-name"
+                                @change="onIslandSelect(selectedPatient.address.island)"
+                                v-model="selectedPatient.address.island"
+                                class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6">
+                                <option value="" disabled>Select an island</option>
+                                <option v-for="island in islands" :key="island.id"
+                                    :value="`${island.atoll} ${island.name}`">{{ `${island.atoll} ${island.name}` }}
+                                </option>
+                            </select>
+                            <ChevronDownIcon
+                                class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
+                                aria-hidden="true" />
+                        </div>
+                    </div>
                     <div class="sm:col-span-3">
                         <label for="house-name" class="block text-sm/6 font-medium text-gray-900">House</label>
                         <div class="mt-2 grid grid-cols-1">
-                            <select id="house" name="house" autocomplete="house-name" @change="onHouseSelect"
+                            <select id="house" name="house" autocomplete="house-name"
                                 v-model="selectedPatient.address.id"
                                 class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6">
                                 <option value="" disabled>Select an house</option>
@@ -90,22 +108,6 @@ const onDeletePatient = () =>{
                         </div>
                     </div>
 
-                    <div class="sm:col-span-3">
-                        <label for="island" class="block text-sm/6 font-medium text-gray-900">Island</label>
-                        <div class="mt-2 grid grid-cols-1">
-                            <select id="island" name="island" autocomplete="island-name" @change="onIslandSelect(selectedPatient.address.island)"
-                                v-model="selectedPatient.address.island" 
-                                class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6">
-                                <option value="" disabled>Select an island</option>
-                                <option v-for="island in islands" :key="island.id"
-                                    :value="`${island.atoll} ${island.name}`">{{ `${island.atoll} ${island.name}` }}
-                                </option>
-                            </select>
-                            <ChevronDownIcon
-                                class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
-                                aria-hidden="true" />
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -114,15 +116,14 @@ const onDeletePatient = () =>{
             <button type="button" @click="onAddNewPatient"
                 class="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green
                 -500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">Add</button>
-            <button type="button"
+            <button type="button" @click="onUpdatePatient"
                 class="rounded-md bg-yellow-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-yellow
-                -500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600"
-                >Update</button>
+                -500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600">Update</button>
             <button type="button" @click="onDeletePatient"
                 class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red
-                -500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
-                >Delete</button>
-            <button type="button" class="rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red
+                -500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">Delete</button>
+            <button type="button"
+                class="rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red
             -500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">Clear</button>
         </div>
     </form>

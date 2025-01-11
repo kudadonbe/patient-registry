@@ -10,13 +10,33 @@ const patientFromDB = ref([]);
 
 const patients_url = `${apiURL}patients`;
 
-// let islands = ref([]);
 let islands = reactive([]);
 let houses = ref([]);
 
 
 
+onMounted(async () => {
+    islands = await getIslands();
+    patientFromDB.value = await getAllPatients();
 
+});
+
+const selectedPatient = reactive({
+    id: '',
+    name: '',
+    dob: '',
+    national_id: '',
+    address: {
+        id: '',
+        house: '',
+        island: ''
+    }
+});
+
+
+const onIslandChanged = async () => {
+    houses.value = await refreshHouses();
+}
 
 
 const getIsland = async (island_id) => {
@@ -53,71 +73,58 @@ const refreshHouses = async () => {
     let islandWithAtoll = selectedPatient.address.island;
     let parts = islandWithAtoll.split(" ")
     let islandName = parts[1]?.trim() || "";
+    let islandData;
     // console.log(fitarable);
 
     let selectedIslandObject = fitarable.filter(island => island.name.toLowerCase() === islandName.toLowerCase());
     // console.log(selectedIslandObject);
 
     if (selectedIslandObject.length > 0) {
-        const islandData = await getIsland(selectedIslandObject[0].id);
-        houses.value = islandData.addresses;
+        islandData = await getIsland(selectedIslandObject[0].id);
     }
-
     // console.log(houses);
+    return islandData.addresses;
 
 }
 
 
+const getHouseById = (houses, id) => {
+
+    console.log(houses);
+    console.log(`House ID: ${id}`);
+
+    let foundHouse = null;
+    // const foundHouse = houses.find(house => house.id === id);
+    return foundHouse ? foundHouse.house : null; // Return null if not found
+}
 
 
-
-
-
-
-
-
-
-
-
-onMounted(async () => {
-    islands = await getIslands();
-
+const getAllPatients = async () => {
+    let patients = [];
     try {
-        const response = await fetch(patients_url);
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-
-        }
-        const patients = await response.json();
-        patientFromDB.value = patients.data;
+        const res = await axios.get(patients_url);
+        patients = res.data;
+        // console.log(patients.data);
+        // patientFromDB.value = patients.data;
 
     } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
     }
 
-    // console.log(patientFromDB);
+    return patients.data
 
-});
-
-const selectedPatient = reactive({
-    id: '',
-    name: '',
-    dob: '',
-    national_id: '',
-    address: {
-        id: '',
-        house: '',
-        island: ''
-    }
-});
+};
 
 
-const onIslandChanged = () => {
-    refreshHouses();
-}
 
 
-const onSelectedPatient = (patient) => {
+
+
+
+
+
+
+const onSelectedPatient = async (patient) => {
     selectedPatient.id = patient.id;
     selectedPatient.name = patient.name;
     selectedPatient.dob = patient.dob;
@@ -125,7 +132,10 @@ const onSelectedPatient = (patient) => {
     selectedPatient.address.island = patient.address.island;
     selectedPatient.address.house = patient.address.house;
     selectedPatient.address.id = patient.address.id;
-    refreshHouses()
+    houses.value = await refreshHouses()
+    // console.log(houses);
+
+    // console.log(patient);
 
 };
 
@@ -133,20 +143,75 @@ const onSelectedPatient = (patient) => {
 
 const updatePatient = async (patient) => {
 
+    console.log(patient);
+
+    //  {
+    //     "id": 36,
+    //     "name": "Ali Mahir",
+    //     "dob": "2025-01-15",
+    //     "national_id": "A096^55",
+    //     "address": {
+    //         "id": 17,
+    //         "house": "Aavi",
+    //         "island": "ADh. Efuru"
+    //     }
+    // }
 
 
     let updatedPatient = {
         name: patient.name,
-        dob: new Date(patient.dob).toLocaleDateString(),
+        dob: patient.dob,
         national_id: patient.national_id,
-        island_id: ''
+        address_id: patient.address.id
     };
+
+
 
     console.log(updatedPatient);
 
+    
+    try {
+        
+        const response = await axios.patch(`${patients_url}/${patient.id}`, updatedPatient, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        });
+        
+        console.log(response);
+        patientFromDB.value = patientFromDB.value.filter((p) => p.id !== patient.id);
+        
+        let upPatient = {
+            id: selectedPatient.id,
+            name: selectedPatient.name,
+            dob: selectedPatient.dob,
+            national_id: selectedPatient.national_id,
+            address: {
+                id: selectedPatient.address.id,
+                house: patient.address.house,
+                island: selectedPatient.address.island
+            }
+        };
+
+        patientFromDB.value.push(upPatient);
+        
+    } catch (error) {
+
+        console.log(error);
+
+    }
+
+
 };
 
+
+
+
+
 const addNewPatient = async (patient) => {
+    console.log(patient);
+
     let newpatient = {
         id: '',
         name: patient.name,
@@ -154,24 +219,25 @@ const addNewPatient = async (patient) => {
         national_id: patient.national_id,
         address_id: patient.address.id
     };
-
     // console.log(newpatient);
 
-    let err = false;
+
+
+
     try {
         // console.log(newpatient);
-
         const response = await axios.post(patients_url, newpatient, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
         });
-
         newpatient = await response.data
-        console.log(newpatient);
-        console.log(selectedPatient);
-        console.log(patientFromDB);
+        // console.log(newpatient);
+        // console.log(selectedPatient);
+        // console.log(patientFromDB);
+
+        const foundHouse = houses.value.find(house => house.id === patient.address.id);
 
         let addedPatient = {
             id: newpatient.id,
@@ -180,24 +246,16 @@ const addNewPatient = async (patient) => {
             national_id: newpatient.national_id,
             address: {
                 id: newpatient.address_id,
-                house: selectedPatient.address.house,
+                house: foundHouse.house,
                 island: selectedPatient.address.island
             }
         };
 
-
         patientFromDB.value.push(addedPatient);
-
     } catch (error) {
         console.error('Error:', error);
-        err = true;
-
     };
-
-
-
 };
-
 
 
 const deletePatient = async (id) => {
@@ -214,17 +272,6 @@ const deletePatient = async (id) => {
 };
 
 
-
-
-
-
-
-
-
-
-
-
-
 </script>
 
 <template>
@@ -238,7 +285,8 @@ const deletePatient = async (id) => {
         </div>
         <div class="p-3">
             <Patientform :selectedPatient="selectedPatient" :houses="houses" :islands="islands"
-                @islandChanged="onIslandChanged" @addPatient="addNewPatient" @deletePatient="deletePatient" />
+                @islandChanged="onIslandChanged" @addPatient="addNewPatient" @deletePatient="deletePatient"
+                @updatePatientInfo="updatePatient" />
         </div>
 
     </div>
