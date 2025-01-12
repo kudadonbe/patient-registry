@@ -12,7 +12,7 @@ Accept: application/json
 content-type: application/json
 
 {
-    "name": "Madikilanbu",
+    "name": "Usgandu",
     "island_id": 10
 }
 

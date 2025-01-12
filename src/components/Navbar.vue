@@ -47,6 +47,15 @@ const isActiveLink = (routePath) => {
                                 'py-2',
                                 'rounded-md',
                             ]">Laravel</RouterLink>
+                            <RouterLink to="/paddress" :class="[
+                                isActiveLink('/paddress')
+                                    ? 'bg-green-900'
+                                    : 'hover:bg-gray-900 hover:text-white',
+                                'text-white',
+                                'px-3',
+                                'py-2',
+                                'rounded-md',
+                            ]">Address</RouterLink>
                             <RouterLink to="/about" :class="[
                                 isActiveLink('/about')
                                     ? 'bg-green-900'

@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import FirebaseView from '../views/FirebaseView.vue'
 import LaravelView from '@/views/LaravelView.vue'
+import PAddress from '@/components/PAddress.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,6 +16,11 @@ const router = createRouter({
       path: '/laravel',
       name: 'laravel',
       component: LaravelView,
+    },
+    {
+      path: '/paddress',
+      name: 'paddress',
+      component: PAddress,
     },
     {
       path: '/firebase',

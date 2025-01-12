@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, reactive } from 'vue';
-import { apiURL } from '@/laravel-api/env';
+import { apiURL } from '@/laravelAPI/env';
 import PatientTable from "@/components/PatientTable.vue";
 import Patientform from '@/components/Patientform.vue';
 
@@ -65,7 +65,6 @@ const refreshHouses = async () => {
     if (!selectedPatient.address.island) {
         houses.value = [];
         console.log("no island selected");
-
         return;
     }
 
@@ -143,7 +142,7 @@ const onSelectedPatient = async (patient) => {
 
 const updatePatient = async (patient) => {
 
-    console.log(patient);
+    // console.log(patient);
 
     //  {
     //     "id": 36,
@@ -167,42 +166,48 @@ const updatePatient = async (patient) => {
 
 
 
-    console.log(updatedPatient);
+    // console.log(updatedPatient);
 
-    
+
     try {
-        
+
         const response = await axios.patch(`${patients_url}/${patient.id}`, updatedPatient, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
         });
-        
-        console.log(response);
-        patientFromDB.value = patientFromDB.value.filter((p) => p.id !== patient.id);
-        
-        let upPatient = {
-            id: selectedPatient.id,
-            name: selectedPatient.name,
-            dob: selectedPatient.dob,
-            national_id: selectedPatient.national_id,
-            address: {
-                id: selectedPatient.address.id,
-                house: patient.address.house,
-                island: selectedPatient.address.island
+
+        // console.log(response);
+        // patientFromDB.value = patientFromDB.value.filter((p) => p.id !== patient.id);
+
+
+
+        const indexToUpdate = patientFromDB.value.findIndex(p => p.id === patient.id);
+        if (indexToUpdate !== -1) {
+            // console.log(patientFromDB.value[indexToUpdate]);
+
+
+            const indexofHouse = houses.value.findIndex(address => address.id === selectedPatient.address.id);
+            // console.log(indexofHouse);
+            // console.log(houses.value[indexofHouse]);
+            if (indexofHouse !== -1) {
+                patientFromDB.value[indexToUpdate].address.house = houses.value[indexofHouse].house;
             }
+
+
+            patientFromDB.value[indexToUpdate].name = selectedPatient.name;
+            patientFromDB.value[indexToUpdate].dob = selectedPatient.dob;
+            patientFromDB.value[indexToUpdate].national_id = selectedPatient.national_id;
+            patientFromDB.value[indexToUpdate].address.id = selectedPatient.address.id;
+            patientFromDB.value[indexToUpdate].address.island = selectedPatient.address.island;
         };
 
-        patientFromDB.value.push(upPatient);
-        
     } catch (error) {
 
         console.log(error);
 
     }
-
-
 };
 
 
@@ -275,8 +280,7 @@ const deletePatient = async (id) => {
 </script>
 
 <template>
-
-    <div class="flex flex-1">
+    <div class="flex flex-1 justify-center">
         <div class="p-3">
             <PatientTable :patients="patientFromDB" @select="onSelectedPatient" />
         </div>
